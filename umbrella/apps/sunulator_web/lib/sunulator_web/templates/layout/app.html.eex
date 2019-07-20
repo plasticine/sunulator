@@ -7,7 +7,7 @@
     <title>Sunulator</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
   </head>
-  <body>
+  <body class="bg-gray-200">
     <header class="container mx-auto mb-8">
       <div class="flex items-center py-4 mb-4">
         <%= link "Sunulator", to: "/", class: "text-2xl font-semibold" %>
