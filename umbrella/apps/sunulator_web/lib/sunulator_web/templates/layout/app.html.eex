@@ -8,18 +8,21 @@
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
   </head>
   <body>
-    <header>
-      <%= link "Sunulator", to: "/" %>
-      <nav>
-        <%= link "Regions", to: Routes.region_path(@conn, :index) %>
-        <%= link "Locations", to: Routes.location_path(@conn, :index) %>
-        <%= link "Scenarios", to: Routes.scenario_path(@conn, :index) %>
-      </nav>
+    <header class="container mx-auto mb-8">
+      <div class="flex items-center py-4 mb-4">
+        <%= link "Sunulator", to: "/", class: "text-2xl font-semibold" %>
+
+        <nav class="flex-auto flex justify-end">
+          <%= link "Regions", to: Routes.region_path(@conn, :index), class: "text-gray-600 bg-gray-300 hover:bg-gray-400 px-5 py-1 ml-4 rounded-full" %>
+          <%= link "Locations", to: Routes.location_path(@conn, :index), class: "text-gray-600 bg-gray-300 hover:bg-gray-400 px-5 py-1 ml-4 rounded-full" %>
+          <%= link "Scenarios", to: Routes.scenario_path(@conn, :index), class: "text-gray-600 bg-gray-300 hover:bg-gray-400 px-5 py-1 ml-4 rounded-full" %>
+        </nav>
+      </div>
     </header>
 
     <hr>
 
-    <main role="main" class="container">
+    <main role="main" class="container mx-auto">
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <%= render @view_module, @view_template, assigns %>
