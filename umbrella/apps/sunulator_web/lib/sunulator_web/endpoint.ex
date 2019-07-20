@@ -14,7 +14,8 @@ defmodule SunulatorWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :sunulator_web,
-    gzip: false,
+    gzip: true,
+    brotli: true,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the

@@ -18,6 +18,10 @@ defmodule SunulatorWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    resources "/regions", RegionController
+    resources "/locations", LocationController
+    resources "/scenarios", ScenarioController
   end
 
   # Other scopes may use custom stacks.

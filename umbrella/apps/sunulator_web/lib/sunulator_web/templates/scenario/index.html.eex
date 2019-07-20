@@ -1,0 +1,26 @@
+<h1>Listing Scenarios</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for scenario <- @scenarios do %>
+    <tr>
+      <td><%= scenario.name %></td>
+
+      <td>
+        <%= link "Show", to: Routes.scenario_path(@conn, :show, scenario) %>
+        <%= link "Edit", to: Routes.scenario_path(@conn, :edit, scenario) %>
+        <%= link "Delete", to: Routes.scenario_path(@conn, :delete, scenario), method: :delete, data: [confirm: "Are you sure?"] %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Scenario", to: Routes.scenario_path(@conn, :new) %></span>

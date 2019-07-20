@@ -1,0 +1,38 @@
+<h1>Show Location</h1>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @location.name %>
+  </li>
+
+  <li>
+    <strong>Latitude:</strong>
+    <%= @location.latitude %>
+  </li>
+
+  <li>
+    <strong>Longitude:</strong>
+    <%= @location.longitude %>
+  </li>
+
+  <li>
+    <strong>Elevation:</strong>
+    <%= @location.elevation %>
+  </li>
+
+  <li>
+    <strong>State:</strong>
+    <%= @location.state %>
+  </li>
+
+  <li>
+    <strong>Postcode:</strong>
+    <%= @location.postcode %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.location_path(@conn, :edit, @location) %></span>
+<span><%= link "Back", to: Routes.location_path(@conn, :index) %></span>

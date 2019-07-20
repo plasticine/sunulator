@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // Ensure a NODE_ENV is also present
@@ -24,7 +25,7 @@ module.exports = (env, options) => ({
     ]
   },
   entry: {
-    './js/app.js': ['./js/app.js'].concat(glob.sync('./vendor/**/*.js'))
+    app: ['./js/app.js'].concat(glob.sync('./vendor/**/*.js'))
   },
   output: {
     filename: `${filenameFormat}.js`,
@@ -78,6 +79,23 @@ module.exports = (env, options) => ({
     ]
   },
   plugins: [
+    new CompressionPlugin({
+      algorithm: 'gzip',
+      filename: '[path].gz[query]',
+      test: /\.js$|\.css$|\.html$/,
+      threshold: 10240,
+      minRatio: 0.8,
+      deleteOriginalAssets: false,
+    }),
+    new CompressionPlugin({
+      algorithm: 'brotliCompress',
+      filename: '[path].br[query]',
+      test: /\.(js|css|html|svg)$/,
+      compressionOptions: { level: 11 },
+      threshold: 10240,
+      minRatio: 0.8,
+      deleteOriginalAssets: false,
+    }),
     new MiniCssExtractPlugin({ filename: '../css/app.css' }),
     new CopyWebpackPlugin([{ from: 'static/', to: '../' }])
   ]
