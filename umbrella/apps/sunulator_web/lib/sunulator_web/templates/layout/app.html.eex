@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
   </head>
   <body class="bg-gray-200">
-    <header class="container mx-auto mb-8">
+    <header class="container mx-auto mb-4">
       <div class="flex items-center py-4 mb-4">
         <%= link "Sunulator", to: "/", class: "text-2xl font-semibold" %>
 
@@ -23,8 +23,22 @@
     <hr>
 
     <main role="main" class="container mx-auto">
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <%= if info = get_flash(@conn, :info) do %>
+        <div class="mb-8 flex justify-center">
+          <div class="p-2 px-6 bg-green-200 items-center text-green-700 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
+            <span class="font-medium flex-auto"><%= info %></span>
+          </div>
+        </div>
+      <% end %>
+
+      <%= if error = get_flash(@conn, :error) do %>
+        <div class="mb-8 flex justify-center">
+          <div class="p-2 px-6 bg-red-200 items-center text-red-700 leading-none lg:rounded-full flex lg:inline-flex" role="alert">
+            <span class="font-medium px-4 text-left flex-auto"><%= error %></span>
+          </div>
+        </div>
+      <% end %>
+
       <%= render @view_module, @view_template, assigns %>
     </main>
     <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
