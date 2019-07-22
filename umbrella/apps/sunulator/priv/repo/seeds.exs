@@ -1,95 +1,142 @@
 # Script for populating the database. You can run it as:
 #
 #     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     Sunulator.Repo.insert!(%Sunulator.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
 
-NimbleCSV.define(LocationDataCSV, separator: ",", escape: "\"")
+# NimbleCSV.define(LocationDataCSV, separator: ",", escape: "\"")
 
-defmodule LocationDataParser do
-  defmodule Location do
-    defstruct [:name, :latitude, :longitude, :state, :postcode]
+# defmodule LocationDataParser do
+#   @moduledoc """
+#   These CSV data files are of the following structure;
 
-    def from_data!({:data, data}), do: from_data!(data)
+#   >>> location header
+#   ... location row 1
+#   ... location row n
+#   >>> data header
+#   ... location row 1 data row 1
+#   ... location row 1 data row 17_520
+#   ... location row 2 data row 1
+#   ... location row 2 data row 17_520
+#   """
 
-    def from_data!([_, name, _, _, latitude, longitude, _, _, _, state, _, _, postcode]) do
-      %__MODULE__{
-        name: name,
-        latitude: Float.parse(latitude),
-        longitude: Float.parse(longitude),
-        state: state,
-        postcode: String.to_integer(postcode)
-      }
-    end
-  end
+#   defmodule Location do
+#     defstruct [:name, :latitude, :longitude, :state, :postcode, :elevation]
 
-  defmodule LocationData do
-    defstruct [:year, :month, :day, :hour, :beam, :diffuse, :tdry]
+#     def from_data!({:data, data}), do: from_data!(data)
 
-    def from_data!({:data, data}), do: from_data!(data)
+#     def from_data!([_, name, _, _, latitude, longitude, _, _, _, state, _, _, postcode]) do
+#       %__MODULE__{
+#         name: name,
+#         latitude: to_float(latitude),
+#         longitude: to_float(longitude),
+#         state: state,
+#         postcode: String.to_integer(postcode),
+#         elevation: 0,
+#       }
+#     end
 
-    def from_data!([year, month, day, hour, beam, diffuse, tdry | _]) do
-      %__MODULE__{
-        year: String.to_integer(year),
-        month: String.to_integer(month),
-        day: String.to_integer(day),
-        hour: String.to_integer(hour),
-        beam: String.to_integer(beam),
-        diffuse: String.to_integer(diffuse),
-        tdry: Float.parse(tdry)
-      }
-    end
-  end
+#     defp to_float(binary) when is_binary(binary), do: to_float(Float.parse(binary))
+#     defp to_float({float, ""}), do: float
+#   end
 
-  def parse do
-    Path.wildcard(Path.join(Path.dirname(__DIR__), "repo/data/*.csv"))
-    |> Enum.take(1)
-    |> Enum.map(&parse_file/1)
-    |> Enum.at(0)
-    |> IO.inspect()
-  end
+#   defmodule LocationData do
+#     defstruct [:year, :month, :day, :hour, :beam, :diffuse, :tdry]
 
-  defp parse_file(file) do
-    [locations | location_data] =
-      file
-      |> File.stream!()
-      |> LocationDataCSV.parse_stream(skip_headers: false)
-      # Parse each line
-      |> Stream.map(&parse_line/1)
-      # Chunk by header groups
-      |> Stream.chunk_by(&header?/1)
-      # Chunk each set of data with it’s respective header
-      |> Stream.chunk_every(2)
-      |> Stream.map(fn [[header: [type: type]], data] ->
-        case type do
-          :location -> Enum.map(data, &Location.from_data!/1)
-          :location_data -> Enum.map(data, &LocationData.from_data!/1)
-        end
-      end)
-      |> Enum.to_list()
+#     def from_data!({:data, data}), do: from_data!(data)
 
-    Enum.zip(locations, location_data)
-  end
+#     def from_data!([year, month, day, hour, beam, diffuse, tdry | _]) do
+#       %__MODULE__{
+#         year: String.to_integer(year),
+#         month: String.to_integer(month),
+#         day: String.to_integer(day),
+#         hour: String.to_integer(hour),
+#         beam: String.to_integer(beam),
+#         diffuse: String.to_integer(diffuse),
+#         tdry: to_float(tdry)
+#       }
+#     end
 
-  defp header?({:header, _}), do: true
-  defp header?({:data, _}), do: false
+#     defp to_float(binary) when is_binary(binary), do: to_float(Float.parse(binary))
+#     defp to_float({float, ""}), do: float
+#   end
 
-  defp parse_line(line) do
-    case line do
-      # Location header line
-      ["Location", "City", "Region" | _] -> {:header, type: :location}
-      # Location data header line
-      ["Year", "Month", "Day" | _] -> {:header, type: :location_data}
-      # Any other line is data!
-      _ -> {:data, line}
-    end
-  end
-end
+#   def parse do
+#     Path.wildcard(Path.join(Path.dirname(__DIR__), "repo/data/nsw.csv"))
+#     |> Enum.map(fn file ->
+#       file
+#       |> stream_file
+#       |> Flow.from_enumerable()
+#       |> Flow.partition()
+#       |> Flow.map(fn item ->
+#         item
+#       end)
+#       |> Flow.run()
+#     end)
+#     |> IO.inspect
+#   end
 
-LocationDataParser.parse()
+#   defp stream_file(file) do
+#     file
+#     |> File.stream!()
+#     |> LocationDataCSV.parse_stream(skip_headers: false)
+#   end
+
+#   defp parse_stream(stream) do
+#     stream
+#     # Parse each line
+#     |> Stream.flat_map(&parse_line/1)
+#     # Chunk by header groups
+#     |> Stream.chunk_by(&header?/1)
+#     # Chunk each set of data with it’s respective header
+#     |> Stream.chunk_every(2)
+#     # Actually parse the data to structs
+#     |> Stream.flat_map(fn
+#       [[header: [type: :location]], data] -> Stream.map(data, &Location.from_data!/1)
+#       [[header: [type: :data]], data] -> Stream.map(data, &LocationData.from_data!/1)
+#     end)
+#     # Chunk by the type
+#     |> Stream.chunk_by(fn
+#       %Location{} -> :location
+#       %LocationData{} -> :data
+#     end)
+#     # Split the locations from the data
+#     |> StreamSplit.pop
+#     # Chunk the data and zip it back with the locations
+#     |> case do
+#       {locations, location_data} ->
+#         location_data = Stream.flat_map(location_data, fn x -> Stream.chunk_every(x, 17_520) end)
+#         locations = Stream.zip(locations, location_data)
+
+#         # {:ok, _} = Sunulator.Repo.transaction fn ->
+#         #   Enum.each(locations, fn {location, _} ->
+#         #     Sunulator.Locations.create_location(%{
+#         #       name: location.name,
+#         #       elevation: location.elevation,
+#         #       latitude: location.latitude,
+#         #       longitude: location.longitude,
+#         #       name: location.name,
+#         #       postcode: location.postcode,
+#         #       state: location.state,
+#         #     })
+#         #   end)
+#         # end
+#     end
+#   end
+
+#   defp header?({:header, _}), do: true
+#   defp header?({:data, _}), do: false
+
+#   defp parse_line(line) do
+#     case line do
+#       # Location header line
+#       ["Location", "City", "Region" | _] -> [{:header, type: :location}]
+#       # Location data header line
+#       ["Year", "Month", "Day" | _] -> [{:header, type: :data}]
+#       # Any other line is data!
+#       _ -> [{:data, line}]
+#     end
+#   end
+# end
+
+alias Sunulator.Locations.Location
+
+Location.CSVParser.parse_files(Path.wildcard(Path.join(Path.dirname(__DIR__), "repo/data/nsw.csv")))

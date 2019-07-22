@@ -7,8 +7,8 @@ use Mix.Config
 # Configure your database
 config :sunulator, Sunulator.Repo,
   show_sensitive_data_on_connection_error: true,
-  username: System.get_env("SUNULATOR_POSTGRES_USERNAME"),
+  username: System.get_env("SUNULATOR_POSTGRES_USERNAME", "postgres"),
   password: System.get_env("SUNULATOR_POSTGRES_PASSWORD"),
   database: "sunulator_dev",
-  hostname: System.get_env("SUNULATOR_POSTGRES_HOSTNAME"),
+  hostname: System.get_env("SUNULATOR_POSTGRES_HOSTNAME", "127.0.0.1"),
   pool_size: 10

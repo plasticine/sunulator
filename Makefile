@@ -4,9 +4,9 @@ CAROOT=$(shell pwd)/dev/certs
 TMUX_SESSION_NAME := sunulator
 
 export SUNULATOR_DOMAIN_NAME := sunulator.hack
-export SUNULATOR_POSTGRES_HOSTNAME := 127.0.0.1
-export SUNULATOR_POSTGRES_USERNAME := postgres
-export SUNULATOR_POSTGRES_PASSWORD :=
+# export SUNULATOR_POSTGRES_HOSTNAME := 127.0.0.1
+# export SUNULATOR_POSTGRES_USERNAME := postgres
+# export SUNULATOR_POSTGRES_PASSWORD :=
 
 # Import and export the contents of .env (if present)
 -include .env
