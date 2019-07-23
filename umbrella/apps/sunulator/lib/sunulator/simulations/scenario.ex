@@ -4,7 +4,8 @@ defmodule Sunulator.Simulations.Scenario do
 
   schema "scenarios" do
     field :name, :string
-    field :location_id, :id
+
+    belongs_to :location, Sunulator.Locations.Location
 
     timestamps()
   end
@@ -12,7 +13,8 @@ defmodule Sunulator.Simulations.Scenario do
   @doc false
   def changeset(scenario, attrs) do
     scenario
-    |> cast(attrs, [:name])
-    |> validate_required([:name])
+    |> cast(attrs, [:name, :location_id])
+    |> validate_required([:name, :location_id])
+    |> foreign_key_constraint(:location_id)
   end
 end

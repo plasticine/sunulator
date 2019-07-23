@@ -5,103 +5,6 @@ defmodule Sunulator.Locations do
 
   import Ecto.Query, warn: false
   alias Sunulator.Repo
-
-  alias Sunulator.Locations.Region
-
-  @doc """
-  Returns the list of regions.
-
-  ## Examples
-
-      iex> list_regions()
-      [%Region{}, ...]
-
-  """
-  def list_regions do
-    Repo.all(Region)
-  end
-
-  @doc """
-  Gets a single region.
-
-  Raises `Ecto.NoResultsError` if the Region does not exist.
-
-  ## Examples
-
-      iex> get_region!(123)
-      %Region{}
-
-      iex> get_region!(456)
-      ** (Ecto.NoResultsError)
-
-  """
-  def get_region!(id), do: Repo.get!(Region, id)
-
-  @doc """
-  Creates a region.
-
-  ## Examples
-
-      iex> create_region(%{field: value})
-      {:ok, %Region{}}
-
-      iex> create_region(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_region(attrs \\ %{}) do
-    %Region{}
-    |> Region.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  @doc """
-  Updates a region.
-
-  ## Examples
-
-      iex> update_region(region, %{field: new_value})
-      {:ok, %Region{}}
-
-      iex> update_region(region, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def update_region(%Region{} = region, attrs) do
-    region
-    |> Region.changeset(attrs)
-    |> Repo.update()
-  end
-
-  @doc """
-  Deletes a Region.
-
-  ## Examples
-
-      iex> delete_region(region)
-      {:ok, %Region{}}
-
-      iex> delete_region(region)
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def delete_region(%Region{} = region) do
-    Repo.delete(region)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking region changes.
-
-  ## Examples
-
-      iex> change_region(region)
-      %Ecto.Changeset{source: %Region{}}
-
-  """
-  def change_region(%Region{} = region) do
-    Region.changeset(region, %{})
-  end
-
   alias Sunulator.Locations.Location
 
   @doc """
@@ -196,5 +99,101 @@ defmodule Sunulator.Locations do
   """
   def change_location(%Location{} = location) do
     Location.changeset(location, %{})
+  end
+
+  alias Sunulator.Locations.Illumination
+
+  @doc """
+  Returns the list of illuminations.
+
+  ## Examples
+
+      iex> list_illuminations()
+      [%Illumination{}, ...]
+
+  """
+  def list_illuminations do
+    Repo.all(Illumination)
+  end
+
+  @doc """
+  Gets a single illumination.
+
+  Raises `Ecto.NoResultsError` if the Illumination does not exist.
+
+  ## Examples
+
+      iex> get_illumination!(123)
+      %Illumination{}
+
+      iex> get_illumination!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_illumination!(id), do: Repo.get!(Illumination, id)
+
+  @doc """
+  Creates a illumination.
+
+  ## Examples
+
+      iex> create_illumination(%{field: value})
+      {:ok, %Illumination{}}
+
+      iex> create_illumination(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_illumination(attrs \\ %{}) do
+    %Illumination{}
+    |> Illumination.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a illumination.
+
+  ## Examples
+
+      iex> update_illumination(illumination, %{field: new_value})
+      {:ok, %Illumination{}}
+
+      iex> update_illumination(illumination, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_illumination(%Illumination{} = illumination, attrs) do
+    illumination
+    |> Illumination.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Illumination.
+
+  ## Examples
+
+      iex> delete_illumination(illumination)
+      {:ok, %Illumination{}}
+
+      iex> delete_illumination(illumination)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_illumination(%Illumination{} = illumination) do
+    Repo.delete(illumination)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking illumination changes.
+
+  ## Examples
+
+      iex> change_illumination(illumination)
+      %Ecto.Changeset{source: %Illumination{}}
+
+  """
+  def change_illumination(%Illumination{} = illumination) do
+    Illumination.changeset(illumination, %{})
   end
 end

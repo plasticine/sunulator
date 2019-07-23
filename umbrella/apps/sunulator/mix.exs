@@ -38,6 +38,8 @@ defmodule Sunulator.MixProject do
     [
       {:ecto_sql, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
+      {:redix, ">= 0.0.0"},
+      {:castore, ">= 0.0.0"},
       {:flow, "~> 0.14"},
       {:nimble_csv, "~> 0.6"},
       {:stream_split, "~> 0.1.2"}

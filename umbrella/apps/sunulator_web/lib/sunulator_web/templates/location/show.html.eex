@@ -18,11 +18,6 @@
   </li>
 
   <li>
-    <strong>Elevation:</strong>
-    <%= @location.elevation %>
-  </li>
-
-  <li>
     <strong>State:</strong>
     <%= @location.state %>
   </li>

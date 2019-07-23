@@ -19,8 +19,8 @@ defmodule SunulatorWeb.Router do
 
     get "/", PageController, :index
 
-    resources "/regions", RegionController
     resources "/locations", LocationController
+    resources "/illuminations", IlluminationController
     resources "/scenarios", ScenarioController
   end
 

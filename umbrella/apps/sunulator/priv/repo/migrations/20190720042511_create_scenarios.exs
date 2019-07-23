@@ -4,7 +4,7 @@ defmodule Sunulator.Repo.Migrations.CreateScenarios do
   def change do
     create table(:scenarios) do
       add :name, :string
-      add :location_id, references(:locations, on_delete: :nothing)
+      add :location_id, references(:locations, on_delete: :delete_all), null: false
 
       timestamps()
     end

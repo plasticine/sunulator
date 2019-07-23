@@ -13,6 +13,12 @@
         <%= error_tag f, :name %>
       </div>
 
+      <div class="mb-4">
+        <%= label f, :location_id, class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= select f, :location_id, locations(), class: "shadow-inner appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" %>
+        <%= error_tag f, :location_id %>
+      </div>
+
       <div>
         <%= submit "Save", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
       </div>

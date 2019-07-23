@@ -7,6 +7,11 @@
     <%= @scenario.name %>
   </li>
 
+  <li>
+    <strong>Location:</strong>
+    <%= @scenario.location.name %>
+  </li>
+
 </ul>
 
 <span><%= link "Edit", to: Routes.scenario_path(@conn, :edit, @scenario) %></span>

@@ -1,0 +1,38 @@
+<h1>Listing Illuminations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>Month</th>
+      <th>Day</th>
+      <th>Sample date</th>
+      <th>Beam</th>
+      <th>Diffuse</th>
+      <th>Bulb temp</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for illumination <- @illuminations do %>
+    <tr>
+      <td><%= illumination.year %></td>
+      <td><%= illumination.month %></td>
+      <td><%= illumination.day %></td>
+      <td><%= illumination.sample_date %></td>
+      <td><%= illumination.beam %></td>
+      <td><%= illumination.diffuse %></td>
+      <td><%= illumination.bulb_temp %></td>
+
+      <td>
+        <%= link "Show", to: Routes.illumination_path(@conn, :show, illumination) %>
+        <%= link "Edit", to: Routes.illumination_path(@conn, :edit, illumination) %>
+        <%= link "Delete", to: Routes.illumination_path(@conn, :delete, illumination), method: :delete, data: [confirm: "Are you sure?"] %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Illumination", to: Routes.illumination_path(@conn, :new) %></span>

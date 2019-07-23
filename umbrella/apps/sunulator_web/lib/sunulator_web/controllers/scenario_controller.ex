@@ -27,7 +27,7 @@ defmodule SunulatorWeb.ScenarioController do
   end
 
   def show(conn, %{"id" => id}) do
-    scenario = Simulations.get_scenario!(id)
+    scenario = Simulations.get_scenario!(id) |> Sunulator.Repo.preload(:location)
     render(conn, "show.html", scenario: scenario)
   end
 

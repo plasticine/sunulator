@@ -1,15 +1,16 @@
 defmodule Sunulator.Locations.Location do
   use Sunulator.Schema
   import Ecto.Changeset
+  alias Sunulator.Locations.Illumination
 
   schema "locations" do
-    field :elevation, :float
     field :latitude, :float
     field :longitude, :float
     field :name, :string
     field :postcode, :integer
     field :state, :string
-    field :region_id, :id
+
+    has_many :illuminations, Illumination
 
     timestamps()
   end
@@ -17,7 +18,7 @@ defmodule Sunulator.Locations.Location do
   @doc false
   def changeset(location, attrs) do
     location
-    |> cast(attrs, [:name, :latitude, :longitude, :elevation, :state, :postcode])
-    |> validate_required([:name, :latitude, :longitude, :elevation, :state, :postcode])
+    |> cast(attrs, [:name, :latitude, :longitude, :state, :postcode])
+    |> validate_required([:name, :latitude, :longitude, :state, :postcode])
   end
 end

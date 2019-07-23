@@ -6,7 +6,6 @@
       <th>Name</th>
       <th>Latitude</th>
       <th>Longitude</th>
-      <th>Elevation</th>
       <th>State</th>
       <th>Postcode</th>
 
@@ -19,7 +18,6 @@
       <td><%= location.name %></td>
       <td><%= location.latitude %></td>
       <td><%= location.longitude %></td>
-      <td><%= location.elevation %></td>
       <td><%= location.state %></td>
       <td><%= location.postcode %></td>
 
