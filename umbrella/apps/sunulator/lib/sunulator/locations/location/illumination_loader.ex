@@ -22,6 +22,8 @@ defmodule Sunulator.Locations.Location.IlluminationLoader do
     NimbleCSV.define(Parser, separator: ",", escape: "\"")
 
     def parse(file) do
+      IO.puts "Parsing #{file}"
+
       file
       |> stream_rows
       |> parse_rows
@@ -133,6 +135,15 @@ defmodule Sunulator.Locations.Location.IlluminationLoader do
       |> Stream.each(&Repo.transaction/1)
       |> Stream.run()
     end
+  end
+
+  def load(files) when is_list(files) do
+    Logger.remove_backend(:console)
+
+    files
+    |> Enum.map(fn file -> Task.async(fn -> load(file) end) end)
+    |> Enum.map(fn task -> Task.await(task, 60_000) end)
+    |> IO.inspect
   end
 
   def load(file) do
