@@ -101,99 +101,99 @@ defmodule Sunulator.Locations do
     Location.changeset(location, %{})
   end
 
-  alias Sunulator.Locations.Illumination
+  alias Sunulator.Locations.Sample
 
   @doc """
-  Returns the list of illuminations.
+  Returns the list of samples.
 
   ## Examples
 
-      iex> list_illuminations()
-      [%Illumination{}, ...]
+      iex> list_samples()
+      [%Sample{}, ...]
 
   """
-  def list_illuminations do
-    Repo.all(Illumination)
+  def list_samples do
+    Repo.all(Sample)
   end
 
   @doc """
-  Gets a single illumination.
+  Gets a single Sample.
 
-  Raises `Ecto.NoResultsError` if the Illumination does not exist.
+  Raises `Ecto.NoResultsError` if the Sample does not exist.
 
   ## Examples
 
-      iex> get_illumination!(123)
-      %Illumination{}
+      iex> get_sample!(123)
+      %sample{}
 
-      iex> get_illumination!(456)
+      iex> get_sample!(456)
       ** (Ecto.NoResultsError)
 
   """
-  def get_illumination!(id), do: Repo.get!(Illumination, id)
+  def get_sample!(id), do: Repo.get!(Sample, id)
 
   @doc """
-  Creates a illumination.
+  Creates a Sample.
 
   ## Examples
 
-      iex> create_illumination(%{field: value})
-      {:ok, %Illumination{}}
+      iex> create_sample(%{field: value})
+      {:ok, %Sample{}}
 
-      iex> create_illumination(%{field: bad_value})
+      iex> create_sample(%{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_illumination(attrs \\ %{}) do
-    %Illumination{}
-    |> Illumination.changeset(attrs)
+  def create_sample(attrs \\ %{}) do
+    %Sample{}
+    |> Sample.changeset(attrs)
     |> Repo.insert()
   end
 
   @doc """
-  Updates a illumination.
+  Updates a Sample.
 
   ## Examples
 
-      iex> update_illumination(illumination, %{field: new_value})
-      {:ok, %Illumination{}}
+      iex> update_sample(Sample, %{field: new_value})
+      {:ok, %Sample{}}
 
-      iex> update_illumination(illumination, %{field: bad_value})
+      iex> update_sample(Sample, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_illumination(%Illumination{} = illumination, attrs) do
-    illumination
-    |> Illumination.changeset(attrs)
+  def update_sample(%Sample{} = sample, attrs) do
+    sample
+    |> Sample.changeset(attrs)
     |> Repo.update()
   end
 
   @doc """
-  Deletes a Illumination.
+  Deletes a Sample.
 
   ## Examples
 
-      iex> delete_illumination(illumination)
-      {:ok, %Illumination{}}
+      iex> delete_sample(Sample)
+      {:ok, %Sample{}}
 
-      iex> delete_illumination(illumination)
+      iex> delete_sample(Sample)
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_illumination(%Illumination{} = illumination) do
-    Repo.delete(illumination)
+  def delete_sample(%Sample{} = sample) do
+    Repo.delete(sample)
   end
 
   @doc """
-  Returns an `%Ecto.Changeset{}` for tracking illumination changes.
+  Returns an `%Ecto.Changeset{}` for tracking Sample changes.
 
   ## Examples
 
-      iex> change_illumination(illumination)
-      %Ecto.Changeset{source: %Illumination{}}
+      iex> change_sample(Sample)
+      %Ecto.Changeset{source: %Sample{}}
 
   """
-  def change_illumination(%Illumination{} = illumination) do
-    Illumination.changeset(illumination, %{})
+  def change_sample(%Sample{} = sample) do
+    Sample.changeset(sample, %{})
   end
 end

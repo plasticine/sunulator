@@ -6,8 +6,10 @@ defmodule Sunulator.Repo.Migrations.CreateLocations do
       add :name, :string
       add :latitude, :float
       add :longitude, :float
+      add :longitude_ref, :float
+      add :time_zone_offset, :float
       add :state, :string
-      add :postcode, :integer
+      add :postcode, :string
 
       timestamps()
     end

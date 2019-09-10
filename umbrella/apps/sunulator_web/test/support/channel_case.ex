@@ -20,6 +20,9 @@ defmodule SunulatorWeb.ChannelCase do
       # Import conveniences for testing with channels
       use Phoenix.ChannelTest
 
+      # Fixtures
+      alias Sunulator.Fixtures
+
       # The default endpoint for testing
       @endpoint SunulatorWeb.Endpoint
     end

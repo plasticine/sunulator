@@ -1,0 +1,36 @@
+<h1>Listing Samples</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Day</th>
+      <th>Interval</th>
+      <th>Interval Type</th>
+      <th>Beam</th>
+      <th>Diffuse</th>
+      <th>Bulb temp</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for sample <- @samples do %>
+    <tr>
+      <td><%= sample.day %></td>
+      <td><%= sample.interval %></td>
+      <td><%= sample.interval_type %></td>
+      <td><%= sample.beam %></td>
+      <td><%= sample.diffuse %></td>
+      <td><%= sample.bulb_temp %></td>
+
+      <td>
+        <%= link "Show", to: Routes.sample_path(@conn, :show, sample) %>
+        <%= link "Edit", to: Routes.sample_path(@conn, :edit, sample) %>
+        <%= link "Delete", to: Routes.sample_path(@conn, :delete, sample), method: :delete, data: [confirm: "Are you sure?"] %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New sample", to: Routes.sample_path(@conn, :new) %></span>

@@ -18,6 +18,16 @@
   </li>
 
   <li>
+    <strong>Longitude Reference:</strong>
+    <%= @location.longitude_ref %>
+  </li>
+
+  <li>
+    <strong>Timezone Offset (Hours):</strong>
+    <%= @location.time_zone_offset %>
+  </li>
+
+  <li>
     <strong>State:</strong>
     <%= @location.state %>
   </li>

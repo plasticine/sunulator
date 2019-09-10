@@ -1,16 +1,9 @@
 defmodule SunulatorWeb.ScenarioControllerTest do
   use SunulatorWeb.ConnCase
 
-  alias Sunulator.Simulations
-
   @create_attrs %{name: "some name"}
   @update_attrs %{name: "some updated name"}
   @invalid_attrs %{name: nil}
-
-  def fixture(:scenario) do
-    {:ok, scenario} = Simulations.create_scenario(@create_attrs)
-    scenario
-  end
 
   describe "index" do
     test "lists all scenarios", %{conn: conn} do
@@ -27,8 +20,10 @@ defmodule SunulatorWeb.ScenarioControllerTest do
   end
 
   describe "create scenario" do
-    test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.scenario_path(conn, :create), scenario: @create_attrs)
+    setup [:create_location]
+
+    test "redirects to show when data is valid", %{conn: conn, location: location} do
+      conn = post(conn, Routes.scenario_path(conn, :create), scenario: Map.put(@create_attrs, :location_id, location.id))
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.scenario_path(conn, :show, id)
@@ -81,8 +76,6 @@ defmodule SunulatorWeb.ScenarioControllerTest do
     end
   end
 
-  defp create_scenario(_) do
-    scenario = fixture(:scenario)
-    {:ok, scenario: scenario}
-  end
+  defp create_scenario(_), do: {:ok, scenario: Fixtures.Simulations.Scenario.insert!()}
+  defp create_location(_), do: {:ok, location: Fixtures.Locations.Location.insert!()}
 end

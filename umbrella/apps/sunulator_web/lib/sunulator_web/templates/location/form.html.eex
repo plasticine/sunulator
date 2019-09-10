@@ -22,6 +22,18 @@
         <%= number_input f, :longitude, step: "any", class: "shadow-inner appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" %>
         <%= error_tag f, :longitude %>
       </div>
+
+      <div class="mb-4">
+        <%= label f, :longitude_ref, class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= number_input f, :longitude_ref, step: "any", class: "shadow-inner appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" %>
+        <%= error_tag f, :longitude_ref %>
+      </div>
+      <div class="mb-4">
+        <%= label f, :time_zone_offset, class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= number_input f, :time_zone_offset, step: "any", class: "shadow-inner appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" %>
+        <%= error_tag f, :time_zone_offset %>
+      </div>
+
       <div class="mb-4">
         <%= label f, :elevation, class: "block text-gray-700 text-sm font-bold mb-2" %>
         <%= number_input f, :elevation, step: "any", class: "shadow-inner appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none" %>

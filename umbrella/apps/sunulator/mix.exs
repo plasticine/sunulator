@@ -37,12 +37,14 @@ defmodule Sunulator.MixProject do
   defp deps do
     [
       {:ecto_sql, "~> 3.0"},
+      {:ecto_enum, "~> 1.3"},
       {:postgrex, ">= 0.0.0"},
       {:redix, ">= 0.0.0"},
       {:castore, ">= 0.0.0"},
       {:flow, "~> 0.14"},
       {:nimble_csv, "~> 0.6"},
-      {:stream_split, "~> 0.1.2"}
+      {:stream_split, "~> 0.1.2"},
+      {:faker, "~> 0.12", only: :test},
     ]
   end
 

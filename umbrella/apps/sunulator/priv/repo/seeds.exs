@@ -2,8 +2,8 @@
 #
 #     mix run priv/repo/seeds.exs
 
-alias Sunulator.Locations.Location.IlluminationLoader
+alias Sunulator.Locations.Sample
 
 Path.join(Path.dirname(__DIR__), "locations/data/*.csv")
 |> Path.wildcard()
-|> IlluminationLoader.load()
+|> Sample.Loader.load()

@@ -1,5 +1,0 @@
-<h1>Edit Illumination</h1>
-
-<%= render "form.html", Map.put(assigns, :action, Routes.illumination_path(@conn, :update, @illumination)) %>
-
-<span><%= link "Back", to: Routes.illumination_path(@conn, :index) %></span>

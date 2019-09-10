@@ -21,6 +21,9 @@ defmodule SunulatorWeb.ConnCase do
       use Phoenix.ConnTest
       alias SunulatorWeb.Router.Helpers, as: Routes
 
+      # Fixtures
+      alias Sunulator.Fixtures
+
       # The default endpoint for testing
       @endpoint SunulatorWeb.Endpoint
     end

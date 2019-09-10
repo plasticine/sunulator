@@ -1,0 +1,38 @@
+<h1>Show Sample</h1>
+
+<ul>
+
+  <li>
+    <strong>Day:</strong>
+    <%= @sample.day %>
+  </li>
+
+  <li>
+    <strong>Interval:</strong>
+    <%= @sample.interval %>
+  </li>
+
+  <li>
+    <strong>Interval Type:</strong>
+    <%= @sample.interval_type %>
+  </li>
+
+  <li>
+    <strong>Beam:</strong>
+    <%= @sample.beam %>
+  </li>
+
+  <li>
+    <strong>Diffuse:</strong>
+    <%= @sample.diffuse %>
+  </li>
+
+  <li>
+    <strong>Bulb temp:</strong>
+    <%= @sample.bulb_temp %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.sample_path(@conn, :edit, @sample) %></span>
+<span><%= link "Back", to: Routes.sample_path(@conn, :index) %></span>

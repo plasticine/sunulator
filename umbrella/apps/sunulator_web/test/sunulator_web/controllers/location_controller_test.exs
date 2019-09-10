@@ -1,16 +1,9 @@
 defmodule SunulatorWeb.LocationControllerTest do
   use SunulatorWeb.ConnCase
 
-  alias Sunulator.Locations
-
-  @create_attrs %{elevation: 120.5, latitude: 120.5, longitude: 120.5, name: "some name", postcode: 42, state: "some state"}
-  @update_attrs %{elevation: 456.7, latitude: 456.7, longitude: 456.7, name: "some updated name", postcode: 43, state: "some updated state"}
-  @invalid_attrs %{elevation: nil, latitude: nil, longitude: nil, name: nil, postcode: nil, state: nil}
-
-  def fixture(:location) do
-    {:ok, location} = Locations.create_location(@create_attrs)
-    location
-  end
+  @create_attrs %{latitude: 120.5, longitude: 120.5, longitude_ref: 120, time_zone_offset: 10.0, name: "some name", postcode: "42", state: "some state"}
+  @update_attrs %{latitude: 456.7, longitude: 456.7, longitude_ref: 150, time_zone_offset: 9.0, name: "some updated name", postcode: "43", state: "some updated state"}
+  @invalid_attrs %{latitude: nil, longitude: nil, longitude_ref: nil, time_zone_offset: nil, name: nil, postcode: nil, state: nil}
 
   describe "index" do
     test "lists all locations", %{conn: conn} do
@@ -81,8 +74,5 @@ defmodule SunulatorWeb.LocationControllerTest do
     end
   end
 
-  defp create_location(_) do
-    location = fixture(:location)
-    {:ok, location: location}
-  end
+  defp create_location(_), do: {:ok, location: Fixtures.Locations.Location.insert!()}
 end
