@@ -2,6 +2,8 @@ defmodule Sunulator.Locations.Sample.Sun do
   @moduledoc """
   This module provides Sun calculation functions for working with Samples.
 
+  At the moment it assumes way too much about the interval type (i.e that it’s 30mins).
+
   References:
 
     - https://www.pveducation.org/pvcdrom/properties-of-sunlight/solar-time
@@ -15,17 +17,17 @@ defmodule Sunulator.Locations.Sample.Sun do
   For a given Sample, calculate the sun's position in the sky.
   """
   def status(%Sample{} = sample) do
-    time_correction = time_correction(day: sample.day, longitude: sample.location.longitude, time_zone_offset: sample.location.time_zone_offset)
-    # local_solar_time = local_solar_time(interval: sample.interval, time_correction: time_correction)
+    time_correction_factor = time_correction_factor(day: sample.day, longitude: sample.location.longitude, time_zone_offset: sample.location.time_zone_offset)
+    # local_solar_time = local_solar_time(interval: sample.interval, time_correction_factor: time_correction_factor)
     # hour_angle = hour_angle(local_solar_time: local_solar_time)
     # declination = declination(day: sample.day)
     # elevation = elevation(latitude: sample.location.latitude, declination: declination, hour_angle: hour_angle)
     # azimuth = azimuth(latitude: sample.location.latitude, declination: declination, elevation: elevation, hour_angle: hour_angle)
-    # sunrise = sunrise(latitude: sample.location.latitude, declination: declination, time_correction: time_correction)
-    # sunset = sunset(latitude: sample.location.latitude, declination: declination, time_correction: time_correction)
+    # sunrise = sunrise(latitude: sample.location.latitude, declination: declination, time_correction_factor: time_correction_factor)
+    # sunset = sunset(latitude: sample.location.latitude, declination: declination, time_correction_factor: time_correction_factor)
 
     {:ok, %{
-      time_correction: time_correction,
+      time_correction_factor: time_correction_factor,
       # local_solar_time: local_solar_time,
       # hour_angle: hour_angle,
       # declination: declination,
@@ -52,7 +54,10 @@ defmodule Sunulator.Locations.Sample.Sun do
   The equation of time (EoT) (also minutes) is an empirical equation that corrects for the eccentricity
   of the Earth's orbit and the Earth's axial tilt.
   """
-  def time_correction(day: day, longitude: longitude, time_zone_offset: time_zone_offset) do
+  def time_correction_factor(day: day, longitude: longitude, time_zone_offset: time_zone_offset) do
+    validate_day!(day)
+
+    # Calculate the LSTM
     local_standard_time_meridian = 360.0 / 24 * time_zone_offset
     # The factor of 4 minutes comes from the fact that the Earth rotates 1° every 4 minutes.
     4.0 * (longitude - local_standard_time_meridian) + equation_of_time(day)
@@ -61,8 +66,13 @@ defmodule Sunulator.Locations.Sample.Sun do
   @doc """
   Local solar time is a decimal number of hours, where hour 12 is noon.
   """
-  def local_solar_time(interval: interval, time_correction: time_correction) do
-    interval / 2 + time_correction / 60
+  def interval_local_solar_time(interval: interval, time_correction_factor: time_correction_factor) do
+    validate_interval!(interval)
+
+    total_minutes = interval * 30
+    hours = :math.floor(total_minutes / 60)
+    minutes = rem(total_minutes, 60)
+    hours + (time_correction_factor + minutes) / 60.0
   end
 
   @doc """
@@ -70,22 +80,25 @@ defmodule Sunulator.Locations.Sample.Sun do
   noon is 15 degrees; morning negative, afternoon positive.
   """
   def hour_angle(local_solar_time: local_solar_time) do
-    (local_solar_time - 12) * 15
+    (local_solar_time - 12.0) * 15.0
   end
 
   @doc """
-  Declination is the angle between the equator and a line drawn from the centre of the Earth to
-  the centre of the sun.
+  Return declination angle of sun in degrees for the give day of the year.
+  Jan 1 day_no = 1, Dec 31 dayno = 365. There is no correction for leap years
   """
   def declination(day: day) do
+    validate_day!(day)
+
     23.45 * Math.sind(360 / 365 * (day - 81))
   end
 
   @doc """
-  Elevation of the sun above the horizon, in degrees.
+  Return the elevation angle of the sun given declination, latitude and local solar time.
   """
-  def elevation(latitude: latitude, declination: declination, hour_angle: hour_angle) do
-    Math.asind(Math.sind(latitude) * Math.sind(declination) + Math.cosd(declination) * Math.cosd(latitude) * Math.cosd(hour_angle))
+  def elevation(latitude: latitude, declination: declination, local_solar_time: local_solar_time) do
+    hour_angle = hour_angle(local_solar_time: local_solar_time)
+    Math.asind(Math.sind(declination) * Math.sind(latitude) + Math.cosd(declination) * Math.cosd(latitude) * Math.cosd(hour_angle))
   end
 
   @doc """
@@ -106,14 +119,22 @@ defmodule Sunulator.Locations.Sample.Sun do
   @doc """
   Time of sunrise as a fraction of a day.
   """
-  def sunrise(latitude: latitude, declination: declination, time_correction: time_correction) do
-    (12 - 1 / 15 * Math.acosd(-Math.tand(latitude) * Math.tand(declination)) - time_correction / 60) / 24
+  def sunrise(latitude: latitude, declination: declination, time_correction_factor: time_correction_factor) do
+    (12 - 1 / 15 * Math.acosd(-Math.tand(latitude) * Math.tand(declination)) - time_correction_factor / 60) / 24
   end
 
   @doc """
   Time of sunset as a fraction of a day.
   """
-  def sunset(latitude: latitude, declination: declination, time_correction: time_correction) do
-    (12 + 1 / 15 * Math.acosd(-Math.tand(latitude) * Math.tand(declination)) - time_correction / 60) / 24
+  def sunset(latitude: latitude, declination: declination, time_correction_factor: time_correction_factor) do
+    (12 + 1 / 15 * Math.acosd(-Math.tand(latitude) * Math.tand(declination)) - time_correction_factor / 60) / 24
+  end
+
+  defp validate_day!(day) do
+    if day < 1 || day > 365, do: raise ArgumentError, message: "Day should be between 1 and 365"
+  end
+
+  defp validate_interval!(interval) do
+    if interval < 1 || interval > 48, do: raise ArgumentError, message: "Interval should be between 1 and 48"
   end
 end
