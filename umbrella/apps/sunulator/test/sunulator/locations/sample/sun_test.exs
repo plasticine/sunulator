@@ -2,12 +2,18 @@ defmodule Sunulator.Locations.Sample.SunTest do
   use ExUnit.Case, async: true
   alias Sunulator.Locations.Sample.Sun
 
+  test "equation_of_time/1 calculates the equation of time" do
+    assert Sun.equation_of_time(day: 1) == -3.7051783233960682
+    assert Sun.equation_of_time(day: 91) == -4.344296101151456
+    assert Sun.equation_of_time(day: 182) == -3.4722852044709
+    assert Sun.equation_of_time(day: 365) == -3.2562349238053425
+  end
+
   test "time_correction_factor/1 calculates the time correction factor" do
     assert_raise ArgumentError, "Day should be between 1 and 365", fn -> Sun.declination(day: 0) end
     assert_raise ArgumentError, "Day should be between 1 and 365", fn -> Sun.declination(day: 366) end
 
-    assert Sun.time_correction_factor(day: 1, longitude: 144.9631, time_zone_offset: 10) == -3.7051783233960682
-    assert Sun.time_correction_factor(day: 1, longitude: 115.8605, time_zone_offset: 8) == -23.85277832339608
+    assert Sun.time_correction_factor(day: 1, longitude: 144.9631, time_zone_offset: 10) == -23.85277832339608
   end
 
   test "declination/1 calculates the declination angle of sun in degrees" do
@@ -39,6 +45,8 @@ defmodule Sunulator.Locations.Sample.SunTest do
   end
 
   test "elevation/1 calculates the elevation angle of the sun" do
-    assert Sun.elevation(latitude: 150, declination: 0, local_solar_time: 0) == 0.015115570297465596
+    assert Sun.elevation(latitude: -37.8075, declination: Sun.declination(day: 1), local_solar_time: 1) == -27.567234447953936
+    # assert Sun.elevation(latitude: -37.8075, declination: declination, local_solar_time: 6) == 13.908267157600413
+    # assert Sun.elevation(latitude: -37.8075, declination: declination, local_solar_time: 12) == 75.27841100283658
   end
 end

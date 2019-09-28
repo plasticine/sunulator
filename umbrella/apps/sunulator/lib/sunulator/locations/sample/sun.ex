@@ -10,7 +10,7 @@ defmodule Sunulator.Locations.Sample.Sun do
     - https://github.com/trautsned/photovoltaic/blob/master/photovoltaic/sun.py
   """
 
-  alias Sunulator.Math
+  alias Sunulator.Math.Trig
   alias Sunulator.Locations.Sample
 
   @doc """
@@ -39,11 +39,13 @@ defmodule Sunulator.Locations.Sample.Sun do
   end
 
   @doc """
-
+  Calculate the Equation of Time for the given day.
   """
-  def equation_of_time(day) do
+  def equation_of_time(day: day) do
+    validate_day!(day)
+
     b = 360.0 / 365.0 * (day - 81.0)
-    9.87 * Math.sind(2 * b) - 7.53 * Math.cosd(b) - 1.5 * Math.sind(b)
+    9.87 * Trig.sind(2 * b) - 7.53 * Trig.cosd(b) - 1.5 * Trig.sind(b)
   end
 
   @doc """
@@ -56,11 +58,13 @@ defmodule Sunulator.Locations.Sample.Sun do
   """
   def time_correction_factor(day: day, longitude: longitude, time_zone_offset: time_zone_offset) do
     validate_day!(day)
+    validate_longitude!(longitude)
 
     # Calculate the LSTM
     local_standard_time_meridian = 360.0 / 24 * time_zone_offset
+
     # The factor of 4 minutes comes from the fact that the Earth rotates 1° every 4 minutes.
-    4.0 * (longitude - local_standard_time_meridian) + equation_of_time(day)
+    4.0 * (longitude - local_standard_time_meridian) + equation_of_time(day: day)
   end
 
   @doc """
@@ -80,7 +84,7 @@ defmodule Sunulator.Locations.Sample.Sun do
   noon is 15 degrees; morning negative, afternoon positive.
   """
   def hour_angle(local_solar_time: local_solar_time) do
-    (local_solar_time - 12.0) * 15.0
+    15.0 * (local_solar_time - 12.0)
   end
 
   @doc """
@@ -90,24 +94,36 @@ defmodule Sunulator.Locations.Sample.Sun do
   def declination(day: day) do
     validate_day!(day)
 
-    23.45 * Math.sind(360 / 365 * (day - 81))
+    23.45 * Trig.sind(360 / 365 * (day - 81))
   end
 
   @doc """
   Return the elevation angle of the sun given declination, latitude and local solar time.
   """
   def elevation(latitude: latitude, declination: declination, local_solar_time: local_solar_time) do
+    validate_latitue!(latitude)
+
     hour_angle = hour_angle(local_solar_time: local_solar_time)
-    Math.asind(Math.sind(declination) * Math.sind(latitude) + Math.cosd(declination) * Math.cosd(latitude) * Math.cosd(hour_angle))
+    Trig.asind(Trig.sind(declination) * Trig.sind(latitude) + Trig.cosd(declination) * Trig.cosd(latitude) * Trig.cosd(hour_angle))
+
+    # arcsind(
+    #   sind(declination) *
+    #   sind(latitude) +
+    #   cosd(declination) *
+    #   cosd(latitude) *
+    #   cosd(hra)
+    # )
   end
 
   @doc """
   Calculate azimuth of the sun from east to west. All values are in degrees, as is the azimuth.
   """
   def azimuth(latitude: latitude, declination: declination, elevation: elevation, hour_angle: hour_angle) do
-    numerator = Math.sind(declination) * Math.cosd(latitude) - Math.cosd(declination) * Math.sind(latitude) * Math.cosd(hour_angle)
-    denominator = Math.cosd(elevation)
-    azimuth = Math.acosd(numerator / denominator)
+    validate_latitue!(latitude)
+
+    numerator = Trig.sind(declination) * Trig.cosd(latitude) - Trig.cosd(declination) * Trig.sind(latitude) * Trig.cosd(hour_angle)
+    denominator = Trig.cosd(elevation)
+    azimuth = Trig.acosd(numerator / denominator)
 
     if hour_angle < 0 do
       azimuth # Before noon
@@ -120,14 +136,18 @@ defmodule Sunulator.Locations.Sample.Sun do
   Time of sunrise as a fraction of a day.
   """
   def sunrise(latitude: latitude, declination: declination, time_correction_factor: time_correction_factor) do
-    (12 - 1 / 15 * Math.acosd(-Math.tand(latitude) * Math.tand(declination)) - time_correction_factor / 60) / 24
+    validate_latitue!(latitude)
+
+    (12 - 1 / 15 * Trig.acosd(-Trig.tand(latitude) * Trig.tand(declination)) - time_correction_factor / 60) / 24
   end
 
   @doc """
   Time of sunset as a fraction of a day.
   """
   def sunset(latitude: latitude, declination: declination, time_correction_factor: time_correction_factor) do
-    (12 + 1 / 15 * Math.acosd(-Math.tand(latitude) * Math.tand(declination)) - time_correction_factor / 60) / 24
+    validate_latitue!(latitude)
+
+    (12 + 1 / 15 * Trig.acosd(-Trig.tand(latitude) * Trig.tand(declination)) - time_correction_factor / 60) / 24
   end
 
   defp validate_day!(day) do
@@ -136,5 +156,13 @@ defmodule Sunulator.Locations.Sample.Sun do
 
   defp validate_interval!(interval) do
     if interval < 1 || interval > 48, do: raise ArgumentError, message: "Interval should be between 1 and 48"
+  end
+
+  defp validate_latitue!(latitue) do
+    if latitue < -90 && latitue > 90, do: raise ArgumentError, message: "Invalid latitude"
+  end
+
+  defp validate_longitude!(longitude) do
+    if longitude < -190 && longitude > 180, do: raise ArgumentError, message: "Invalid longitude"
   end
 end

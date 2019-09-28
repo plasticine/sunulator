@@ -1,23 +1,22 @@
 defmodule Sunulator.Math do
-  def pi, do: :math.pi()
+  defmodule Trig do
+    def to_degrees(radians), do: radians * :math.pi() / 180
+    def to_radians(degrees), do: degrees * 180 / :math.pi()
 
-  def sin(rad), do: :math.sin(rad)
-  def sind(rad), do: sin(tod(rad))
+    def sin(angle), do: :math.sin(angle)
+    def asin(angle), do: :math.asin(angle)
+    def cos(angle), do: :math.cos(angle)
+    def acos(angle), do: :math.acos(angle)
+    def tan(angle), do: :math.tan(angle)
+    def atan(angle), do: :math.atan(angle)
 
-  def asin(rad), do: :math.asin(rad)
-  def asind(rad), do: asin(tod(rad))
+    def sind(angle), do: sin(to_radians(angle))
+    def asind(angle), do: asin(to_radians(angle))
 
-  def cos(rad), do: :math.cos(rad)
-  def cosd(rad), do: cos(tod(rad))
+    def cosd(angle), do: cos(to_radians(angle))
+    def acosd(angle), do: acos(to_radians(angle))
 
-  def acos(rad), do: :math.acos(rad)
-  def acosd(rad), do: acos(tod(rad))
-
-  def tan(rad), do: :math.tan(rad)
-  def tand(rad), do: tan(tod(rad))
-
-  def atan(rad), do: :math.atan(rad)
-  def atand(rad), do: atan(tod(rad))
-
-  defp tod(rad), do: rad * pi() / 180
+    def tand(angle), do: tan(to_radians(angle))
+    def atand(angle), do: atan(to_radians(angle))
+  end
 end

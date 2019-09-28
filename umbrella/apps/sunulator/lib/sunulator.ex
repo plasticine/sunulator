@@ -11,14 +11,15 @@ defmodule Sunulator do
     @doc """
     Utility method to find globally by UUID.
     """
-    def find!(_uuid) do
-      # IO.inspect uuid
-
+    def find!(uuid) do
       {:ok, modules} = :application.get_key(:sunulator, :modules)
 
       modules
-      |> Enum.filter(&({:__schema__, 1} in &1.__info__(:functions)))
-      |> Enum.ma
+      |> Stream.filter(&({:__schema__, 1} in &1.__info__(:functions)))
+      |> Stream.map(fn schema -> Sunulator.Repo.get(schema, uuid) end)
+      |> Stream.reject(&Kernel.is_nil/1)
+      |> Enum.take(1)
+      |> Enum.at(0)
     end
   end
 end
