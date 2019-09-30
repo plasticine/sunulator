@@ -5,7 +5,7 @@ defmodule Sunulator.Locations.Sample.SunTest do
   test "equation_of_time/1 calculates the equation of time" do
     assert Sun.equation_of_time(day: 1) == -3.7051783233960682
     assert Sun.equation_of_time(day: 91) == -4.344296101151456
-    assert Sun.equation_of_time(day: 182) == -3.4722852044709
+    assert Sun.equation_of_time(day: 182) == -3.4722852044708983
     assert Sun.equation_of_time(day: 365) == -3.2562349238053425
   end
 

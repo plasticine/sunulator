@@ -40,12 +40,15 @@ defmodule Sunulator.Locations.Sample.Sun do
 
   @doc """
   Calculate the Equation of Time for the given day.
+
+  The equation of time (EoT) (in minutes) is an empirical equation that corrects for the eccentricity
+  of the Earth's orbit and the Earth's axial tilt.
   """
   def equation_of_time(day: day) do
     validate_day!(day)
 
-    b = 360.0 / 365.0 * (day - 81.0)
-    9.87 * Trig.sind(2 * b) - 7.53 * Trig.cosd(b) - 1.5 * Trig.sind(b)
+    b = Trig.deg2rad(360.0 / 365.0 * (day - 81.0))
+    9.87 * Trig.sin(2 * b) - 7.53 * Trig.cos(b) - 1.5 * Trig.sin(b)
   end
 
   @doc """
@@ -94,7 +97,7 @@ defmodule Sunulator.Locations.Sample.Sun do
   def declination(day: day) do
     validate_day!(day)
 
-    23.45 * Trig.sind(360 / 365 * (day - 81))
+    23.45 * Trig.sin(Trig.deg2rad(360 / 365 * (day - 81)))
   end
 
   @doc """
@@ -104,15 +107,15 @@ defmodule Sunulator.Locations.Sample.Sun do
     validate_latitue!(latitude)
 
     hour_angle = hour_angle(local_solar_time: local_solar_time)
-    Trig.asind(Trig.sind(declination) * Trig.sind(latitude) + Trig.cosd(declination) * Trig.cosd(latitude) * Trig.cosd(hour_angle))
+    # Trig.asind(Trig.sind(declination) * Trig.sind(latitude) + Trig.cosd(declination) * Trig.cosd(latitude) * Trig.cosd(hour_angle))
 
-    # arcsind(
-    #   sind(declination) *
-    #   sind(latitude) +
-    #   cosd(declination) *
-    #   cosd(latitude) *
-    #   cosd(hra)
-    # )
+    Trig.rad2deg(arcsin(
+      Trig.deg2rad(sin(declination)) *
+      Trig.deg2rad(sin(latitude)) +
+      Trig.deg2rad(cos(declination)) *
+      Trig.deg2rad(cos(latitude)) *
+      Trig.deg2rad(cos(hour_angle))
+    )
   end
 
   @doc """

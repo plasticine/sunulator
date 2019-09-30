@@ -32,5 +32,5 @@ IEx.configure [
 import Ecto.Query
 import Ecto.Changeset
 
-import Sunulator.IExUtils
+import Sunulator.IExUtils.Finder
 alias Sunulator.Repo
